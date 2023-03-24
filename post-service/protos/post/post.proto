@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package post;
+
+service PostService {
+    rpc Create(PostRequest) returns (PostResponse) {}
+    rpc GetPostById(IdRequest) returns (PostResponse) {}
+    rpc GetAllPostsByUserId(IdRequest) returns(Posts) {}
+    rpc GetPostForComment(IdRequest) returns (PostResponse) {}
+    rpc GetPostForUser(IdRequest) returns (Posts) {}
+    rpc GetPosts(GetForPosts) returns (Posts) {}
+    rpc UpdatePost(PostRequest) returns (PostResponse) {}
+    rpc DeletePost(IdRequest) returns (PostResponse) {}
+}
+
+message GetForPosts {
+    int64 limit = 1;
+    int64 page = 2;
+}
+
+message PostResponse {
+    int64 id = 1;
+    string title = 2;
+    string description =3 ;
+    int64 user_id = 5;
+    string user_name = 6;
+    string user_email = 7;
+    string created_at = 8;
+    string updated_at = 9;
+}
+
+message IdRequest {
+    int64 id = 1;
+}
+
+message Comment {
+    int64 id = 1;
+    string post_title = 2;
+    int64 user_id = 3;
+    string user_name = 4;
+    string post_user_name = 5;
+    string text = 6;
+    string created_at = 7;
+}
+
+message PostRequest {
+    int64 id = 1;
+    string title = 2;
+    string description =3;
+    int64 user_id = 4;
+}
+
+message Posts {
+    repeated PostResponse posts = 1;
+}
+
+
+
