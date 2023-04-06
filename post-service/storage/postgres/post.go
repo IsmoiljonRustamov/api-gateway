@@ -39,7 +39,7 @@ func (r *postRepo) Create(post *p.PostRequest) (*p.PostResponse, error) {
 func (r *postRepo) GetPostById(post *p.IdRequest) (*p.PostResponse, error) {
 	var postResp p.PostResponse
 	err := r.db.QueryRow(`
-	SELECT id,title,description,user_id,created_at,updated_at from posts  WHERE user_id=$1`, post.Id).Scan(
+	SELECT id,title,description,user_id,created_at,updated_at from posts  WHERE id=$1`, post.Id).Scan(
 		&postResp.Id, &postResp.Title, &postResp.Description, &postResp.UserId, &postResp.CreatedAt, &postResp.UpdatedAt)
 	if err != nil {
 		return nil, err
