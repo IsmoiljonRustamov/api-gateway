@@ -31,7 +31,7 @@ func main() {
 	grpc_client,err := grpcClient.New(cfg)
 	if err != nil {
 		fmt.Println("error while grpc client from user-service",err.Error())
-	}
+	}	
 	userService := service.NewUserService(connDB, log,grpc_client)
 
 	lis, err := net.Listen("tcp", cfg.UserServicePort)

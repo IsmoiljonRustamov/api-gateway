@@ -3,6 +3,8 @@ package service
 import (
 	"context"
 	"database/sql"
+	"fmt"
+
 	"log"
 	pc "projects/user-service/genproto/comment"
 	pp "projects/user-service/genproto/post"
@@ -10,6 +12,9 @@ import (
 	l "projects/user-service/pkg/logger"
 	grpcClient "projects/user-service/service/grpc_client"
 	storage "projects/user-service/storage"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type UserService struct {
@@ -27,19 +32,33 @@ func NewUserService(db *sql.DB, log l.Logger, client grpcClient.Clients) *UserSe
 }
 
 func (s *UserService) Create(ctx context.Context, req *pu.UserRequest) (*pu.UserResponse, error) {
-	user, err := s.storage.User().Create(req)
+	fmt.Println(req.UserName)
+	user, err := s.storage.User().Create(&pu.UserRequest{
+		Id:       req.Id,
+		Name:     req.Name,
+		Email:    req.Email,
+		Password: req.Password,
+		UserName: req.UserName,
+	})
+
 	if err != nil {
 		s.logger.Error("error while creating")
-		return nil, err
+		return &pu.UserResponse{}, err
 	}
-	return user, nil
+	return &pu.UserResponse{
+		Id:       user.Id,
+		Name:     user.Name,
+		Email:    user.Email,
+		Password: req.Password,
+		UserName: req.UserName,
+	}, nil
 }
 
 func (s *UserService) GetUserById(ctx context.Context, req *pu.IdRequest) (*pu.UserResponse, error) {
-	user, err := s.storage.User().GetUserById(req)
+	user, err := s.storage.User().GetUserById(&pu.IdRequest{Id: req.Id})
 	if err != nil {
 		s.logger.Error("error while getting by id")
-		return nil, err
+		return &pu.UserResponse{}, err
 	}
 	posts, err := s.Client.Post().GetAllPostsByUserId(ctx, &pp.IdRequest{Id: user.Id})
 	if err != nil {
@@ -66,11 +85,11 @@ func (s *UserService) GetUserById(ctx context.Context, req *pu.IdRequest) (*pu.U
 		}
 	}
 
-	return user, nil
+	return user,nil
 }
 
 func (s *UserService) GetUserForClient(ctx context.Context, id *pu.IdRequest) (*pu.UserResponse, error) {
-	user, err := s.storage.User().GetUserForClient(id)
+	user, err := s.storage.User().GetUserForClient(&pu.IdRequest{Id: id.Id})
 	if err != nil {
 		log.Println("failed to get user for client: ", err)
 		return nil, err
@@ -83,7 +102,7 @@ func (s *UserService) GetUsers(ctx context.Context, req *pu.UserForGetUsers) (*p
 	users, err := s.storage.User().GetUsers(req)
 	if err != nil {
 		log.Println("failed to get users indo: ", err)
-		return nil, err
+		return &pu.Users{}, err
 	}
 	for _, user := range users.Users {
 
@@ -114,7 +133,7 @@ func (s *UserService) GetUsers(ctx context.Context, req *pu.UserForGetUsers) (*p
 				comment.PostUserName = user.Name
 				comment.PostTitle = post.Title
 
-				connUser, err := s.storage.User().GetUserById(&pu.IdRequest{Id: comment.UserId})
+				connUser, err := s.storage.User().GetUserById(&pu.IdRequest{Id: commenT.UserId})
 				if err != nil {
 					log.Println("failed to get comment user: ", err)
 					return &pu.Users{}, err
@@ -135,23 +154,34 @@ func (s *UserService) GetUsers(ctx context.Context, req *pu.UserForGetUsers) (*p
 
 func (s *UserService) UpdateUser(ctx context.Context, user *pu.UserRequest) (*pu.UserForUpdate, error) {
 	users, err := s.storage.User().UpdateUser(&pu.UserRequest{
-		Id:    user.Id,
-		Name:  user.Name,
-		Email: user.Email,
+		Id:       user.Id,
+		Name:     user.Name,
+		Email:    user.Email,
+		Password: user.Password,
+		UserName: user.UserName,
 	})
 	if err != nil {
 		log.Println("Failed to update user info: ", err)
 	}
 
-	return users, nil
-
+	return users,nil
 }
 
 func (s *UserService) DeleteUser(ctx context.Context, user *pu.IdRequest) (*pu.UserForUpdate, error) {
-	_, err := s.storage.User().DeleteUser(&pu.IdRequest{Id: user.Id})
+	_, err := s.storage.User().DeleteUser(user)
 	if err != nil {
 		log.Println("Failed to delete user info: ", err)
 	}
 
 	return &pu.UserForUpdate{}, nil
+}
+
+func (s *UserService) CheckField(ctx context.Context, req *pu.CheckFieldReq) (*pu.CheckFieldRes, error) {
+	res, err := s.storage.User().CheckField(req)
+	if err != nil {
+		s.logger.Error("error check", l.Any("error check filed user", err))
+		return &pu.CheckFieldRes{}, status.Error(codes.Internal, "something went wrong, please check user info")
+	}
+
+	return res, nil
 }

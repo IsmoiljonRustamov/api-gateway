@@ -11,4 +11,6 @@ type UserStorageI interface {
 	GetUsers(*pb.UserForGetUsers) (*pb.Users,error)
 	UpdateUser(*pb.UserRequest) (*pb.UserForUpdate,error)
 	DeleteUser(*pb.IdRequest) (*pb.UserForUpdate,error) 
+	CheckField(*pb.CheckFieldReq) (*pb.CheckFieldRes, error)
 }
+
