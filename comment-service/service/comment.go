@@ -92,7 +92,7 @@ func (s *CommentService) GetComments(ctx context.Context, req *c.ForGetComments)
 }
 
 func (s *CommentService) GetCommentsForPost(ctx context.Context, req *c.GetAllCommentsRequest) (*c.Comments, error) {
-	res, err := s.storage.Comment().GetComment(req)
+	res, err := s.storage.Comment().GetCommentsForPost(req)
 	if err != nil {
 		log.Println("Failed to get comments for client: ", err)
 		return &c.Comments{}, err

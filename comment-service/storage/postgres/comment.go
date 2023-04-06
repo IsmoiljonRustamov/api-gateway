@@ -96,7 +96,7 @@ func (s *CommentRepo) UpdateComment(comment *c.ForUpdate) (*c.CommentResponse, e
 
 func (s *CommentRepo) GetComment(comment *c.GetAllCommentsRequest) (*c.Comments, error) {
 	var res c.Comments
-	rows, err := s.db.Query("SELECT id, post_id, user_id, text FROM comments WHERE post_id=$1", comment)
+	rows, err := s.db.Query("SELECT id, post_id, user_id, text FROM comments WHERE post_id=$1", comment.PostId)
 	if err != nil {
 		return nil, err
 	}
