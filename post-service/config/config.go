@@ -36,7 +36,7 @@ func Load() Config {
 	c.CommentServicePort = cast.ToString(getOrReturnDefault("COMMIT_SERVICE_PORT","8001"))
 
 	c.PostServiceHost = cast.ToString(getOrReturnDefault("POST_SERVICE_HOST", "localhost"))
-	c.PostServicePort = cast.ToString(getOrReturnDefault("POST_SERVICE_PORT", ":9090"))
+	c.PostServicePort = cast.ToString(getOrReturnDefault("POST_SERVICE_PORT", ":9091"))
 
 	c.UserServiceHost = cast.ToString(getOrReturnDefault("USER_SERVICE_HOST", "localhost"))
 	c.UserServicePort = cast.ToString(getOrReturnDefault("USER_SERVICE_PORT", "8081"))

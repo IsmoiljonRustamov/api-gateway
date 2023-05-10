@@ -27,7 +27,11 @@ func NewPostService(db *sql.DB, log l.Logger, client grpc_client.Clients) *PostS
 }
 
 func (s *PostService) Create(ctx context.Context, req *pb.PostRequest) (*pb.PostResponse, error) {
-	post, err := s.storage.Post().Create(req)
+	post, err := s.storage.Post().Create(&pb.PostRequest{
+		Title: req.Title,
+		Description: req.Description,
+		UserId: req.UserId,
+	})
 	if err != nil {
 		s.logger.Error("error while created from post-service")
 		return nil, err
@@ -169,11 +173,11 @@ func (s *PostService) GetPosts(ctx context.Context, post *pb.GetForPosts) (*pb.P
 
 }
 
-func (s *PostService) UpdatePost(ctx context.Context, post *pb.PostRequest) (*pb.PostResponse, error) {
-	posts, err := s.storage.Post().UpdatePost(&pb.PostRequest{
-		Id:          post.Id,
-		Title:       post.Title,
+func (s *PostService) UpdatePost(ctx context.Context, post *pb.RequestForUpdate) (*pb.PostResponse, error) {
+	posts, err := s.storage.Post().UpdatePost(&pb.RequestForUpdate{
+		Id: post.Id,
 		Description: post.Description,
+		Title: post.Title,
 	})
 	if err != nil {
 		log.Println("Failed to update post info: ", err)

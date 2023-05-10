@@ -11,7 +11,7 @@ type PostStorageI interface {
 	GetPostForComment(*p.IdRequest) (*p.PostResponse, error)
 	GetPostForUser(*p.IdRequest) (*p.Posts, error)
 	GetPosts(*p.GetForPosts) (*p.Posts,error)
-	UpdatePost(*p.PostRequest) (*p.PostResponse,error)
+	UpdatePost(*p.RequestForUpdate) (*p.PostResponse,error)
 	DeletePost(*p.IdRequest) (*p.PostResponse,error)
 }
 

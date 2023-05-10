@@ -137,7 +137,7 @@ func (r *postRepo) GetPosts(post *p.GetForPosts) (*p.Posts, error) {
 	return &resp, nil
 }
 
-func (r *postRepo) UpdatePost(post *p.PostRequest) (*p.PostResponse, error) {
+func (r *postRepo) UpdatePost(post *p.RequestForUpdate) (*p.PostResponse, error) {
 	var res p.PostResponse
 	fmt.Println(post.Id)
 	err := r.db.QueryRow("UPDATE posts SET title=$1, description=$2 WHERE id=$3 RETURNING title,description,user_id,id", post.Title, post.Description, post.Id).Scan(

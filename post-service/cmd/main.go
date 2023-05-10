@@ -5,6 +5,7 @@ import (
 	"net"
 	"projects/post-service/config"
 	pb "projects/post-service/genproto/post"
+	"projects/post-service/kafka"
 	"projects/post-service/pkg/db"
 	"projects/post-service/pkg/logger"
 	"projects/post-service/service"
@@ -28,11 +29,14 @@ func main() {
 		log.Fatal("connection to postgres error", logger.Error(err))
 	}
 
-	grpcclient,err := grpc_client.New(cfg)
+	UserCreateTopic := kafka.NewKafkaConsumer(connDB, &cfg, log, "user")
+	go UserCreateTopic.Start()
+
+	grpcclient, err := grpc_client.New(cfg)
 	if err != nil {
-		fmt.Println("error while grpc client from post-service",err.Error())
+		fmt.Println("error while grpc client from post-service", err.Error())
 	}
-	postService := service.NewPostService(connDB, log,grpcclient)
+	postService := service.NewPostService(connDB, log, grpcclient)
 
 	lis, err := net.Listen("tcp", cfg.PostServicePort)
 	if err != nil {

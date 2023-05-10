@@ -9,7 +9,7 @@ service PostService {
     rpc GetPostForComment(IdRequest) returns (PostResponse) {}
     rpc GetPostForUser(IdRequest) returns (Posts) {}
     rpc GetPosts(GetForPosts) returns (Posts) {}
-    rpc UpdatePost(PostRequest) returns (PostResponse) {}
+    rpc UpdatePost(RequestForUpdate) returns (PostResponse) {}
     rpc DeletePost(IdRequest) returns (PostResponse) {}
 }
 
@@ -19,10 +19,10 @@ message GetForPosts {
 }
 
 message PostResponse {
-    int64 id = 1;
+    string id = 1;
     string title = 2;
     string description =3 ;
-    int64 user_id = 5;
+    string user_id = 5;
     string user_name = 6;
     string user_email = 7;
     string created_at = 8;
@@ -30,13 +30,13 @@ message PostResponse {
 }
 
 message IdRequest {
-    int64 id = 1;
+    string id = 1;
 }
 
 message Comment {
     int64 id = 1;
     string post_title = 2;
-    int64 user_id = 3;
+    string user_id = 3;
     string user_name = 4;
     string post_user_name = 5;
     string text = 6;
@@ -44,15 +44,21 @@ message Comment {
 }
 
 message PostRequest {
-    int64 id = 1;
+    string id = 1;
     string title = 2;
     string description =3;
-    int64 user_id = 4;
+    string user_id = 4;
 }
 
 message Posts {
     repeated PostResponse posts = 1;
 }
 
+
+message RequestForUpdate {
+    string id = 1;
+    string title = 2;
+    string description =3;   
+}
 
 
