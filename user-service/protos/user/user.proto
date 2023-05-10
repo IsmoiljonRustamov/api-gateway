@@ -11,6 +11,37 @@ service UserService {
     rpc UpdateUser(UserRequest) returns (UserForUpdate) {}
     rpc DeleteUser(IdRequest) returns (UserForUpdate) {}
     rpc CheckField(CheckFieldReq) returns (CheckFieldRes) {}
+    rpc Login(LoginRequest) returns (LoginResponse) {}
+    rpc UpdateToken(RequestForTokens) returns (LoginResponse) {}
+
+}
+
+message PostForCreate {
+    string poster_id= 1;
+    string description_post= 2;
+}
+
+message RequestForTokens {
+    string id = 1;
+    string acces_token = 2;
+    string refresh_token = 3;
+}
+
+
+message LoginRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    string id = 1;
+    string name = 2;
+    string email = 3;
+    string password = 4;
+    string user_name = 5;
+    string acces_token = 6;
+    string refresh_token = 7;   
+    string user_type = 8;
 }
 
 message CheckFieldReq {
@@ -23,32 +54,38 @@ message CheckFieldRes {
 }
 
 message UserRequest {
-    int64 id = 1;
+    string id = 1;
     string name = 2;
     string email = 3;
-    string password = 4;
-    string user_name = 5;
+    string user_type = 4;
+    string password = 5;
+    string user_name = 6;
+    string refresh_token = 8;
+    PostForCreate posts=9;
 }
 
 message UserForUpdate {
-    int64 id = 1;
+    string id = 1;
     string name = 2;
     string email = 3;
-    string created_at =4;
+    string created_at =4; 
     string updated_at = 5;
     string password =6;
     string user_name = 7;
 }
 
 message UserResponse {
-    int64 id = 1;
+    string id = 1;
     string name = 2;
     string email = 3;
-    string password = 4;
-    string user_name = 5;
-    repeated Post posts=6;
-    string created_at = 7;
-    string updated_at = 8;
+    string user_type = 4;
+    string password = 5;
+    string user_name = 6;
+    string refresh_token = 7;
+    repeated Post posts=8;
+    string created_at = 9;
+    string updated_at = 10;
+    string acces_token = 11;
 }
 
 message Users {
@@ -65,7 +102,7 @@ message Post {
 }
 
 message IdRequest {
-    int64 id = 1;
+    string id = 1;
 }
 
 message UserForGetUsers {

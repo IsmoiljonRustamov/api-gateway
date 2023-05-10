@@ -7,10 +7,10 @@ import (
 )
 
 type Config struct {
-	PostServiceHost   string
-	PostServicePort   string
-	UserServiceHost   string
-	UserServicePort   string
+	PostServiceHost    string
+	PostServicePort    string
+	UserServiceHost    string
+	UserServicePort    string
 	CommentServiceHost string
 	CommentServicePort string
 
@@ -24,7 +24,7 @@ type Config struct {
 
 func Load() Config {
 	c := Config{}
-	
+
 	c.PostgresHost = cast.ToString(getOrReturnDefault("POSTGRES_HOST", "localhost"))
 	c.PostgresPort = cast.ToString(getOrReturnDefault("POSTGRES_PORT", "5432"))
 	c.PostgresUser = cast.ToString(getOrReturnDefault("POSTGRES_USER", "ismoiljon12"))
@@ -32,11 +32,11 @@ func Load() Config {
 	c.PostgresDatabase = cast.ToString(getOrReturnDefault("POSTGRES_DATABASE", "user_db"))
 	c.LogLevel = cast.ToString(getOrReturnDefault("LOG_LEVEL", "debug"))
 
-	c.CommentServiceHost = cast.ToString(getOrReturnDefault("COMMIT_SERVICE_HOST","localhost"))
-	c.CommentServicePort = cast.ToString(getOrReturnDefault("COMMIT_SERVICE_PORT","8001"))
+	c.CommentServiceHost = cast.ToString(getOrReturnDefault("COMMIT_SERVICE_HOST", "localhost"))
+	c.CommentServicePort = cast.ToString(getOrReturnDefault("COMMIT_SERVICE_PORT", "8001"))
 
 	c.PostServiceHost = cast.ToString(getOrReturnDefault("POST_SERVICE_HOST", "localhost"))
-	c.PostServicePort = cast.ToString(getOrReturnDefault("POST_SERVICE_PORT", "9090"))
+	c.PostServicePort = cast.ToString(getOrReturnDefault("POST_SERVICE_PORT", "9091"))
 
 	c.UserServiceHost = cast.ToString(getOrReturnDefault("USER_SERVICE_HOST", "localhost"))
 	c.UserServicePort = cast.ToString(getOrReturnDefault("USER_SERVICE_PORT", ":8081"))

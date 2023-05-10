@@ -12,8 +12,8 @@ service CommentService {
 }
 
 message CommentRequest {
-    int64 user_id = 1;
-    int64 post_id = 2;
+    string user_id = 1;
+    string post_id = 2;
     string text = 3;
 }
 
@@ -24,9 +24,9 @@ message ForGetComments {
 
 message CommentResponse {
     int64 id = 1;
-    int64 post_id = 2;
+    string post_id = 2;
     string post_title = 3;
-    int64 user_id = 4;
+    string user_id = 4;
     string user_name = 5;
     string post_user_name = 6;
     string text = 7;
@@ -34,7 +34,7 @@ message CommentResponse {
 }
 
 message GetAllCommentsRequest {
-    int64 post_id = 1;
+    string post_id = 1;
 }
 
 message Comments {
@@ -42,12 +42,12 @@ message Comments {
 }
 
 message IdRequest {
-    int64 id = 1;
+    string id = 1;
 }
 
 message ForUpdate {
     int64 id = 1;
-    int64 post_id = 2;
+    string post_id = 2;
     string text = 3;
-    int64 user_id = 4;
+    string user_id = 4;
 }
